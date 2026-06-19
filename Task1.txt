@@ -1,0 +1,105 @@
+# ============================================
+# Student Performance Analysis using Python
+# ============================================
+
+# Import required libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# --------------------------------------------
+# Load Dataset
+# --------------------------------------------
+df = pd.read_csv("student-mat.csv")
+
+# --------------------------------------------
+# Display Dataset Information
+# --------------------------------------------
+print("===== First 5 Rows of Dataset =====")
+print(df.head())
+
+print("\n===== Dataset Information =====")
+print(df.info())
+
+print("\n===== Missing Values =====")
+print(df.isnull().sum())
+
+# --------------------------------------------
+# Statistical Analysis
+# --------------------------------------------
+average_grade = df['G3'].mean()
+maximum_grade = df['G3'].max()
+minimum_grade = df['G3'].min()
+median_grade = df['G3'].median()
+
+print("\n===== Student Performance Analysis =====")
+print("Average Final Grade :", round(average_grade, 2))
+print("Maximum Grade       :", maximum_grade)
+print("Minimum Grade       :", minimum_grade)
+print("Median Grade        :", median_grade)
+
+print("\n===== Summary Statistics =====")
+print(df['G3'].describe())
+
+# --------------------------------------------
+# Create Pass/Fail Column
+# Pass if G3 >= 10
+# --------------------------------------------
+df['Result'] = df['G3'].apply(lambda x: 'Pass' if x >= 10 else 'Fail')
+
+# --------------------------------------------
+# Visualization 1: Histogram
+# --------------------------------------------
+plt.figure(figsize=(8,5))
+plt.hist(df['G3'], bins=10, color='skyblue', edgecolor='black')
+
+plt.title("Distribution of Final Grades")
+plt.xlabel("Grade")
+plt.ylabel("Frequency")
+plt.grid(True, linestyle='--', alpha=0.7)
+
+plt.show()
+
+# --------------------------------------------
+# Visualization 2: Bar Chart
+# --------------------------------------------
+grade_counts = df['G3'].value_counts().sort_index()
+
+plt.figure(figsize=(10,5))
+plt.bar(grade_counts.index, grade_counts.values)
+
+plt.title("Frequency of Final Grades")
+plt.xlabel("Final Grade (G3)")
+plt.ylabel("Number of Students")
+plt.grid(axis='y')
+
+plt.show()
+
+# --------------------------------------------
+# Visualization 3: Pass vs Fail Pie Chart
+# --------------------------------------------
+result_counts = df['Result'].value_counts()
+
+plt.figure(figsize=(6,6))
+plt.pie(result_counts,
+        labels=result_counts.index,
+        autopct='%1.1f%%',
+        startangle=90)
+
+plt.title("Pass vs Fail Percentage")
+
+plt.show()
+
+# --------------------------------------------
+# Save Histogram as Image
+# --------------------------------------------
+plt.figure(figsize=(8,5))
+plt.hist(df['G3'], bins=10, color='skyblue', edgecolor='black')
+
+plt.title("Distribution of Final Grades")
+plt.xlabel("Grade")
+plt.ylabel("Frequency")
+plt.grid(True)
+
+plt.savefig("grades_distribution.png")
+
+print("\nGraph saved successfully as 'grades_distribution.png'")
